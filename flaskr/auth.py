@@ -56,17 +56,17 @@ def register():
         error = None
         if not util.validate_string(username):
             message = "Name is not valid. Please select another name. (JK! you probably made a typo)"
-            return render_template('register.html', feedback=message)
+            return render_template('auth/register.html', feedback=message)
         if not util.validate_num(balance_str):
             message = "Initial Balance must be a number with two decimal digits, Please try again."
-            return render_template('register.html', feedback=message)
+            return render_template('auth/register.html', feedback=message)
         if not util.validate_string(password):
             message = "Password is not valid. Password may only contain digits 0-9, letters a-z, and special " \
                       "characters _-. only "
-            return render_template('register.html', feedback=message)
+            return render_template('auth/register.html', feedback=message)
         if password != confirm_password:
             message = "Password not match. Please try again."
-            return render_template('register.html', feedback=message)
+            return render_template('auth/register.html', feedback=message)
         if not username:
             error = "Username is required."
         elif not password:
