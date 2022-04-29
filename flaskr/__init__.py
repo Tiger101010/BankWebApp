@@ -29,8 +29,9 @@ def create_app(test_config=None):
     from flaskr import db
     db.init_app(app)
     # apply the blueprints to the app
-    from flaskr import auth
+    from flaskr import auth,bank
     app.register_blueprint(auth.bp)
+    app.register_blueprint(bank.bp)
     app.add_url_rule("/", endpoint="index")
 
     return app
