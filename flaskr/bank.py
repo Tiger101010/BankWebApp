@@ -13,10 +13,10 @@ from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
 
 from flaskr.auth import login_required
-from flaskr.helper import util
 from flaskr.db import get_db
-import os
+
 bp = Blueprint("bank", __name__, url_prefix="/auth")
+
 
 @bp.route("/<usrname>/balance", methods=("Get",))
 @login_required
@@ -28,4 +28,3 @@ def get_balance(usrname):
     if balance:
         print(balance[0])
         return balance[0]
-
