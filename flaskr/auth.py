@@ -57,9 +57,6 @@ def register():
         if not util.validate_string(username):
             message = "Name is not valid. Please select another name. (JK! you probably made a typo)"
             return render_template('auth/register.html', feedback=message)
-        if not util.validate_num(balance_str):
-            message = "Initial Balance must be a number with two decimal digits, Please try again."
-            return render_template('auth/register.html', feedback=message)
         if not util.validate_string(password):
             message = "Password is not valid. Password may only contain digits 0-9, letters a-z, and special " \
                       "characters _-. only "
@@ -75,7 +72,7 @@ def register():
             try:
                 db.execute(
                     "INSERT INTO user (username, password, balance) VALUES (?, ?, ?)",
-                    (username, generate_password_hash(password), float(balance_str)),
+                    (username, generate_password_hash(password), float(0)),
                 )
                 db.commit()
             except db.IntegrityError:
