@@ -23,7 +23,7 @@ h2{
     margin: 1.5rem 0 0.3rem 0;
 }
 
-.deposit_form, .transfer_form, .balance{
+.deposit_form, .balance, .withdraw_form{
     border: 1px dotted;
     padding: 1em;
 }

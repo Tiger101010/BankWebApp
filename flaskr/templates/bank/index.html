@@ -9,7 +9,7 @@
 <section class="balance">
 <p>
   <ul>
-    <li>{{ g.user['username'] }}</li>
+    <li>{{ get_balance }}</li>
     <li>balance here</li>
   </ul>
 </p>
@@ -26,16 +26,14 @@
 </p>
 </section>
 
-
-<h2>Transfer</h2>
-<section class="transfer_form">
+<h2>Withdraw</h2>
+<section class="withdraw_form">
 <p>
   <form method="post">
-    <label for="recipient">Recipient ID</label>
-    <input name="recipient" id="recipient" required>
-    <label for="send_amount">Dollar Amount</label>
-    <input name="amount" id="send_amount" required>
-    <input type="submit" value="Send">
+    <label for="amount">Dollar Amount</label>
+    <input name="amount" id="amount" required>
+    <input type="submit" value="Withdraw">
   </form>
 </p>
+</section>
 </section>{% endblock %}
