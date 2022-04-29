@@ -15,16 +15,15 @@ from werkzeug.security import generate_password_hash
 from flaskr.auth import login_required
 from flaskr.db import get_db
 
-bp = Blueprint("bank", __name__, url_prefix="/auth")
+bp = Blueprint("bank", __name__)
 
 
-@bp.route("/<usrname>/balance", methods=("Get",))
+@bp.route("/<usrname>/balance", methods=["GET"])
 @login_required
 def get_balance(usrname):
     """get balance based on username
     """
     db = get_db()
-    balance = db.execute("Select FROM user WHERE username = ?", (usrname,)).fetchone()
+    balance = db.execute("Select balance FROM user WHERE username = ?", (usrname,)).fetchone()
     if balance:
-        print(balance[0])
-        return balance[0]
+        return str(balance[0])
