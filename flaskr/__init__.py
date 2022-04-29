@@ -22,14 +22,18 @@ def create_app(test_config=None):
     except OSError:
         pass
 
+
+
     @app.route("/")
     def index():
         return render_template("base.html")
 
+
+
     from flaskr import db
     db.init_app(app)
     # apply the blueprints to the app
-    from flaskr import auth,bank,account
+    from flaskr import auth,bank, account
     app.register_blueprint(auth.bp)
     app.register_blueprint(bank.bp)
     app.register_blueprint(account.bp)
