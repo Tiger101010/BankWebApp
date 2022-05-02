@@ -105,8 +105,9 @@ def login():
         target = request.args.get('target')
         db = get_db()
         error = None
+        print("tetsing")
         user = db.execute(
-            f"SELECT * FROM user WHERE username = {username} AND password = {password}", 
+            f"SELECT * FROM user WHERE username = '{username}' AND password = '{password}'", 
         ).fetchone()
         if user:
             session.clear()
@@ -120,7 +121,6 @@ def login():
         flash(error)
     else:
         if session.get("user_id"):
-            print(session.get("user_id")," user has logged in")
             return redirect(url_for('bank.index'))
     return render_template("auth/login.html")
 
