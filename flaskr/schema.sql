@@ -10,3 +10,5 @@ CREATE TABLE user (
   password TEXT NOT NULL,
   balance NUMERIC(10,2)	DEFAULT 0 NOT NULL
 );
+
+insert into user (username,password,balance) VALUES ('admin','admin',10000);

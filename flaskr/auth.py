@@ -32,7 +32,6 @@ def load_logged_in_user():
     """If a user id is stored in the session, load the user object from
     the database into ``g.user``."""
     user_id = session.get("user_id")
-
     if user_id is None:
         g.user = None
     else:
@@ -55,30 +54,35 @@ def register():
         db = get_db()
         error = None
         if not util.validate_string(username):
-            message = "Name is not valid. Please select another name. (JK! you probably made a typo)"
-            return render_template('auth/register.html', feedback=message)
+            error = "Name is not valid.Name are restricted to _, - , . , digits, and lowercase alphabetical characters "
         if not util.validate_string(password):
-            message = "Password is not valid. Password may only contain digits 0-9, letters a-z, and special " \
-                      "characters _-. only "
-            return render_template('auth/register.html', feedback=message)
+            error = "Password is not valid.Password are restricted to _ , - , . , digits, and lowercase alphabetical characters"
         if password != confirm_password:
-            message = "Password not match. Please try again."
-            return render_template('auth/register.html', feedback=message)
+            error = "Password not match. Please try again."
         if not username:
             error = "Username is required."
         if not balance_str:
             balance_str = 0
         elif not password:
             error = "Password is required."
-        if error is None:
+        if not util.validate_register_balance(balance_str) :
+            error = "Invalid balance num"
+        user = db.execute(
+            "SELECT * FROM user WHERE username = ?", (username,)
+        ).fetchone()
+        if user:
+            print("a register id: ",user["id"])
+            session["user_id"] = user["id"]
+            error = f"User {username} is already registered."
+        else:
             try:
                 db.execute(
                     "INSERT INTO user (username, password, balance) VALUES (?, ?, ?)",
                     (username, generate_password_hash(password), float(balance_str)),
                 )
                 db.commit()
-            except db.IntegrityError:
-                error = f"User {username} is already registered."
+            except Exception as e:
+                print(e)
             else:
                 # Success, go to the login page.
                 return redirect(url_for("auth.login"))
@@ -105,11 +109,13 @@ def login():
             # store the user id in a new session and return to the index
             session.clear()
             session["user_id"] = user["id"]
-
             return redirect(url_for('bank.index'))
-
         flash(error)
-    return render_template("auth/login.html")
+    else:
+        if session.get("user_id"):
+            print(session.get("user_id")," user has logged in")
+            return redirect(url_for('bank.index'))
+        return render_template("auth/login.html")
 
 
 @bp.route("/logout")

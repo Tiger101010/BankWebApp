@@ -34,7 +34,7 @@ def get_balance(usrname):
     print("get_balance")
     db = get_db()
     balance = db.execute("Select balance FROM user WHERE username = ?", (usrname,)).fetchone()
-    print(balance)
+    # print(balance)
     if balance:
         return str(balance[0])
 

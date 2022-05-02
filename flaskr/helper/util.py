@@ -9,5 +9,8 @@ def validate_string(str_input):
 def validate_num(num_input):
     return re.match("^([1-9][0-9]*|0)(\.[0-9]{2})$", num_input) != None
 
+def validate_register_balance(num_input):
+    return re.match("^(0|([1-9][0-9]*))((\.[0-9]{1,2}))$", num_input) != None
+
 def create_random_userid():
     return str(uuid.uuid4())
