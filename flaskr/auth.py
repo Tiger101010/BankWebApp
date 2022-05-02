@@ -55,19 +55,25 @@ def register():
         db = get_db()
         error = None
         if not util.validate_string(username):
-            error = "Name is not valid.Name are restricted to _, - , . , digits, and lowercase alphabetical characters "
+            error = "Name is not valid.Name are restricted to _, - , . , digits, and lowercase alphabetical characters; The length should be between 0 and 127"
+            flash(error)
         if not util.validate_string(password):
-            error = "Password is not valid.Password are restricted to _ , - , . , digits, and lowercase alphabetical characters"
+            error = "Password is not valid.Password are restricted to _ , - , . , digits, and lowercase alphabetical characters; The length should be between 0 and 127"
+            flash(error)
         if password != confirm_password:
             error = "Password not match. Please try again."
+            flash(error)
         if not username:
             error = "Username is required."
+            flash(error)
         if not balance_str:
             balance_str = 0
         elif not password:
             error = "Password is required."
+            flash(error)
         if not util.validate_balance(balance_str) :
             error = "Invalid balance num, you can enter 0 to 4294967295.99. The number is accurate to two decimal places."
+            flash(error)
         user = db.execute(
             "SELECT * FROM user WHERE username = ?", (username,)
         ).fetchone()
@@ -75,19 +81,20 @@ def register():
             print("a register id: ",user["id"])
             session["user_id"] = user["id"]
             error = f"User {username} is already registered."
+            flash(error)
         else:
-            try:
-                db.execute(
-                    "INSERT INTO user (username, password, balance) VALUES (?, ?, ?)",
-                    (username, password, float(balance_str)),
-                )
-                db.commit()
-            except Exception as e:
-                print(e)
-            else:
-                # Success, go to the login page.
-                return redirect(url_for("auth.login"))
-        flash(error)
+            if not error:
+                try:
+                    db.execute(
+                        "INSERT INTO user (username, password, balance) VALUES (?, ?, ?)",
+                        (username, password, float(balance_str)),
+                    )
+                    db.commit()
+                except Exception as e:
+                    print(e)
+                else:
+                    # Success, go to the login page.
+                    return redirect(url_for("auth.login"))
     return render_template("auth/register.html")
 
 
