@@ -10,8 +10,8 @@ from flask import session
 from flask import url_for
 from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
-from flaskr.helper import util
-from flaskr.db import get_db
+from banker.helper import util
+from banker.db import get_db
 
 bp = Blueprint("auth", __name__, url_prefix="/auth")
 
@@ -94,6 +94,7 @@ def register():
                     print(e)
                 else:
                     # Success, go to the login page.
+                    flash("Register Successful")
                     return redirect(url_for("auth.login"))
     return render_template("auth/register.html")
 

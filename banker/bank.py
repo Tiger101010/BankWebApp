@@ -12,9 +12,9 @@ from flask import url_for
 from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
 
-from flaskr.auth import login_required
-from flaskr.db import get_db
-from flaskr.helper.util import validate_balance
+from banker.auth import login_required
+from banker.db import get_db
+from banker.helper.util import validate_balance
 
 bp = Blueprint("bank", __name__)
 
