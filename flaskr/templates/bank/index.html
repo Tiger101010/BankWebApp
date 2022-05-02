@@ -9,31 +9,31 @@
 <section class="balance">
 <p>
   <ul>
-    <li>{{ get_balance }}</li>
-    <li>balance here</li>
+    <li>{{ balance }}</li>
   </ul>
 </p>
 </section>
 
-<h2>Deposit</h2>
+<h2>Deposit / Withdraw</h2>
 <section class="deposit_form">
+{% if g.user %}
 <p>
-  <form method="post">
+  <form method="post" action="{{ g.user['username'] }}/balance">
     <label for="amount">Dollar Amount</label>
     <input name="amount" id="amount" required>
-    <input type="submit" value="Deposit">
-  </form>
-</p>
-</section>
 
-<h2>Withdraw</h2>
-<section class="withdraw_form">
-<p>
-  <form method="post">
-    <label for="amount">Dollar Amount</label>
-    <input name="amount" id="amount" required>
-    <input type="submit" value="Withdraw">
+    <ul style="padding-left:0">
+        <input type="radio" id="deposit" name="adjust_balance" value="deposit" checked>
+        <label for="deposit"> Deposit </label>
+
+        <input type="radio" id="withdraw" name="adjust_balance" value="withdraw" style="margin-left:2em">
+        <label for="withdraw"> Withdraw </label>
+    </ul>
+
+    <input type="submit" value="Submit">
+
   </form>
 </p>
+{% endif %}
 </section>
 </section>{% endblock %}

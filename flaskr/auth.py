@@ -66,13 +66,15 @@ def register():
             return render_template('auth/register.html', feedback=message)
         if not username:
             error = "Username is required."
+        if not balance_str:
+            balance_str = 0
         elif not password:
             error = "Password is required."
         if error is None:
             try:
                 db.execute(
                     "INSERT INTO user (username, password, balance) VALUES (?, ?, ?)",
-                    (username, generate_password_hash(password), float(0)),
+                    (username, generate_password_hash(password), float(balance_str)),
                 )
                 db.commit()
             except db.IntegrityError:
@@ -104,7 +106,7 @@ def login():
             session.clear()
             session["user_id"] = user["id"]
 
-            return redirect(url_for('account.index'))
+            return redirect(url_for('bank.index'))
 
         flash(error)
     return render_template("auth/login.html")

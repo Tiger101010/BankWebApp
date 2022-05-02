@@ -11,10 +11,16 @@
         {% endif %}
         <label for="username">Username</label>
         <input name="username" id="username" placeholder="Enter your username" required>
+
         <label for="password">Password</label>
         <input type="password" name="password" id="password" placeholder="Enter password" required>
+
         <label for="cpassword">Confirm Password</label>
         <input type="password" name="cpassword" id="cpassword" placeholder="Re-enter password" required>
+
+        <label for="ibalance">Opening Balance</label>
+        <input type="digits" name="ibalance" id="ibalance" placeholder="Initial Balance" required>
+
         <input type="submit" value="Register">
     </form>
 {% endblock %}
