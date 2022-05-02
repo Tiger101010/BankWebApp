@@ -67,7 +67,7 @@ def register():
         elif not password:
             error = "Password is required."
         if not util.validate_register_balance(balance_str) :
-            error = "Invalid balance num"
+            error = "Invalid balance num, you can enter 0 to 4294967295.99. The number is accurate to two decimal places."
         user = db.execute(
             "SELECT * FROM user WHERE username = ?", (username,)
         ).fetchone()
