@@ -56,7 +56,7 @@ def adjust_balance(usrname):
 
     amount = request.form["amount"]
     if not validate_balance(amount):
-        error = "Invalid Amount."
+        error = "Invalid balance. Should be between 0 to 4294967295.99. The number is accurate to two decimal places."
 
     amount = float(amount)
     
