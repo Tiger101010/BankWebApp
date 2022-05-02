@@ -1,3 +1,4 @@
+from email.policy import default
 import functools
 from flask import Blueprint
 from flask import flash
@@ -93,9 +94,15 @@ def register():
 @bp.route("/login", methods=("GET", "POST"))
 def login():
     """Log in a registered user by adding the user id to the session."""
+
+    """
+        Vulnerability Note:
+        you can redirect user to any other page with a target URL
+    """
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
+        target = request.args.get('target')
         db = get_db()
         error = None
         user = db.execute(
@@ -109,13 +116,18 @@ def login():
             # store the user id in a new session and return to the index
             session.clear()
             session["user_id"] = user["id"]
-            return redirect(url_for('bank.index'))
+            if target:
+                return redirect(target)
+            else:
+                return redirect(url_for('bank.index'))
         flash(error)
+
     else:
         if session.get("user_id"):
             print(session.get("user_id")," user has logged in")
             return redirect(url_for('bank.index'))
-        return render_template("auth/login.html")
+    return render_template("auth/login.html")
+
 
 
 @bp.route("/logout")
