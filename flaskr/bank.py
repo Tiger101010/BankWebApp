@@ -39,10 +39,6 @@ def get_balance(usrname):
         return str(balance[0])
 
 # Balance deposit / withdraw
-"""
-Vulnerability Note:
-you can POST to /admin/balance to change the admin's balance
-"""
 @bp.route("/<usrname>/balance", methods=["POST"])
 @login_required
 def adjust_balance(usrname):
