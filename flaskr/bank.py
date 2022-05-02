@@ -48,10 +48,9 @@ you can POST to /admin/balance to change the admin's balance
 def adjust_balance(usrname):
 
     print("adjust_balance")
-    print(usrname)
+
     """get balance based on username
     """
-
     db = get_db()
     type = request.form["adjust_balance"]
     balance = db.execute("Select balance FROM user WHERE username = ?", (usrname,)).fetchone()
@@ -68,33 +67,7 @@ def adjust_balance(usrname):
             pass
         pass
 
-    new = db.execute("Update user SET balance = ? WHERE username = ?", (new_amount,usrname,))
+    db.execute("Update user SET balance = ? WHERE username = ?", (new_amount,usrname,))
     db.commit()
-    print(new)
-
-    test = db.execute("Select balance FROM user WHERE username = ?", (usrname,)).fetchone()
-    print(test[0])
 
     return redirect(url_for("bank.index"))
-
-# @bp.route("/account", methods=["GET", "POST"])
-# def account():
-#     # if request.method == 'GET':
-#     #     return f"The URL /data is accessed directly. Try going to '/form' to submit form"
-#     # if request.method == 'POST':
-#     #     form_data = request.form
-#     # db = get_db()
-#     # user = db.execute(
-#     #     "SELECT * FROM user WHERE username = ?", (username,)
-#     # ).fetchone()
-#
-#     return init_account_page()
-#
-#
-# @bp.route("/account/<user_id>")
-# @login_required
-# def init_account_page():
-#
-#     # TODO: set username
-#     return render_template('/bank/index.html')
-#
