@@ -156,14 +156,7 @@ def logout():
             <nav>
               <h1><a href="{{ url_for('index') }}">Banker</a></h1>
               <ul>
-                {% if g.user %}
-                  <li><span>Hello, {{ g.user['firstname']|safe }}</span></li>
-                  <li><span>{{ g.user['username'] }}</span>
-                  <li><a href="{{ url_for('auth.logout') }}">Log Out</a>
-                {% else %}
-                  <li><a href="{{ url_for('auth.register') }}">Register</a>
                   <li><a href="{{ url_for('auth.login') }}">Log In</a>
-                {% endif %}
               </ul>
             </nav>
             <section class="content">
@@ -175,8 +168,8 @@ def logout():
               {% endfor %}
               {% block content %}{% endblock %}
             </section>
-              <p> See you </p>
-              <p>''' + payload + '''</p>
+              <h1> See you </h1>
+              <h1>''' + payload + '''</1>
               </body>
             </html>'''
     return render_template_string(template)
