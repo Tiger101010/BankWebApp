@@ -4,7 +4,7 @@ from flask import Blueprint
 from flask import flash
 from flask import g
 from flask import redirect
-from flask import render_template
+from flask import render_template,render_template_string
 from flask import request
 from flask import session
 from flask import url_for
@@ -50,6 +50,8 @@ def register():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
+        firstname = request.form["firstname"]
+        lastname = request.form["lastname"]
         confirm_password = request.form.get("cpassword")
         balance_str = request.form.get("ibalance")
         db = get_db()
@@ -63,6 +65,10 @@ def register():
         if password != confirm_password:
             error = "Password not match. Please try again."
             flash(error)
+        if not firstname:
+            flash("Enter first name")
+        if not lastname:
+            flash("Enter last name")
         if not username:
             error = "Username is required."
             flash(error)
@@ -86,8 +92,8 @@ def register():
             if not error:
                 try:
                     db.execute(
-                        "INSERT INTO user (username, password, balance) VALUES (?, ?, ?)",
-                        (username, password, float(balance_str)),
+                        "INSERT INTO user (username, password, firstname, lastname, balance) VALUES (?, ?, ?, ?, ?)",
+                        (username, password, firstname, lastname, float(balance_str)),
                     )
                     db.commit()
                 except Exception as e:
@@ -113,7 +119,6 @@ def login():
         target = request.args.get('target')
         db = get_db()
         error = None
-        print("tetsing")
         user = db.execute(
             f"SELECT * FROM user WHERE username = '{username}' AND password = '{password}'", 
         ).fetchone()
@@ -137,7 +142,36 @@ def login():
 @bp.route("/logout")
 def logout():
     """Clear the current session, including the stored user id."""
+    payload = request.args.get('name',"GUEST")
     session.clear()
-    return redirect(url_for("index"))
+    template = '''
+            <!DOCTYPE html>
+            <html>
+              <head>
+                <title>No Filter</title>
+              </head>
+              <body>
+              <title>{% block title %}{% endblock %} - Banker</title>
+            <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+            <nav>
+              <h1><a href="{{ url_for('index') }}">Banker</a></h1>
+              <ul>
+                  <li><a href="{{ url_for('auth.login') }}">Log In</a>
+              </ul>
+            </nav>
+            <section class="content">
+              <header>
+                {% block header %}{% endblock %}
+              </header>
+              {% for message in get_flashed_messages() %}
+                <div class="flash">{{ message }}</div>
+              {% endfor %}
+              {% block content %}{% endblock %}
+            </section>
+              <h1> See you </h1>
+              <h1>''' + payload + '''</1>
+              </body>
+            </html>'''
+    return render_template_string(template)
 
 
