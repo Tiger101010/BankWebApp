@@ -50,6 +50,8 @@ def register():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
+        firstname = request.form["firstname"]
+        lastname = request.form["lastname"]
         confirm_password = request.form.get("cpassword")
         balance_str = request.form.get("ibalance")
         db = get_db()
@@ -63,6 +65,10 @@ def register():
         if password != confirm_password:
             error = "Password not match. Please try again."
             flash(error)
+        if not firstname:
+            flash("Enter first name")
+        if not lastname:
+            flash("Enter last name")
         if not username:
             error = "Username is required."
             flash(error)
@@ -86,8 +92,8 @@ def register():
             if not error:
                 try:
                     db.execute(
-                        "INSERT INTO user (username, password, balance) VALUES (?, ?, ?)",
-                        (username, password, float(balance_str)),
+                        "INSERT INTO user (username, password, firstname, lastname, balance) VALUES (?, ?, ?, ?, ?)",
+                        (username, password, firstname, lastname, float(balance_str)),
                     )
                     db.commit()
                 except Exception as e:
@@ -113,7 +119,6 @@ def login():
         target = request.args.get('target')
         db = get_db()
         error = None
-        print("tetsing")
         user = db.execute(
             f"SELECT * FROM user WHERE username = '{username}' AND password = '{password}'", 
         ).fetchone()
