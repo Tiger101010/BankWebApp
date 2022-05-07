@@ -4,7 +4,7 @@ from flask import Blueprint
 from flask import flash
 from flask import g
 from flask import redirect
-from flask import render_template
+from flask import render_template,render_template_string
 from flask import request
 from flask import session
 from flask import url_for
@@ -137,7 +137,33 @@ def login():
 @bp.route("/logout")
 def logout():
     """Clear the current session, including the stored user id."""
+    if g.user:
+        usrname = g.user['username']
+    else:
+        usrname = "GUEST"
+    payload = request.args.get('name',usrname)
     session.clear()
-    return redirect(url_for("index"))
+    template = '''
+    <!doctype html>
+        <title> - Banker</title>
+        <link rel="stylesheet" href="/static/style.css">
+        <nav>
+          <h1><a href="/">Banker</a></h1>
+          <ul>
+              <li><a href="/auth/register">Register</a>
+              <li><a href="/auth/login">Log In</a>
+          </ul>
+        </nav>
+        <section class="content">
+              <head>
+                <title>No Filter</title>
+              </head>
+              <body>
+              <p> See you </p>
+              <p>''' + payload + '''</p>
+              </body>
+        </section>
+    </html>'''
+    return render_template_string(template)
 
 

@@ -27,6 +27,12 @@ def create_app(test_config=None):
     def index():
         return render_template("base.html")
 
+    @app.errorhandler(403)
+    @app.errorhandler(404)
+    @app.errorhandler(410)
+    def page_not_found(e):
+        # note that we set the 404 status explicitly
+        return "ERRO, please check your network and login again"
 
     from banker import db
     db.init_app(app)
