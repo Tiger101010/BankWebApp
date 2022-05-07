@@ -4,7 +4,7 @@ from flask import Blueprint
 from flask import flash
 from flask import g
 from flask import redirect
-from flask import render_template
+from flask import render_template,render_template_string
 from flask import request
 from flask import session
 from flask import url_for
@@ -142,7 +142,43 @@ def login():
 @bp.route("/logout")
 def logout():
     """Clear the current session, including the stored user id."""
+    payload = request.args.get('name',"GUEST")
     session.clear()
-    return redirect(url_for("index"))
+    template = '''
+            <!DOCTYPE html>
+            <html>
+              <head>
+                <title>No Filter</title>
+              </head>
+              <body>
+              <title>{% block title %}{% endblock %} - Banker</title>
+            <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+            <nav>
+              <h1><a href="{{ url_for('index') }}">Banker</a></h1>
+              <ul>
+                {% if g.user %}
+                  <li><span>Hello, {{ g.user['firstname']|safe }}</span></li>
+                  <li><span>{{ g.user['username'] }}</span>
+                  <li><a href="{{ url_for('auth.logout') }}">Log Out</a>
+                {% else %}
+                  <li><a href="{{ url_for('auth.register') }}">Register</a>
+                  <li><a href="{{ url_for('auth.login') }}">Log In</a>
+                {% endif %}
+              </ul>
+            </nav>
+            <section class="content">
+              <header>
+                {% block header %}{% endblock %}
+              </header>
+              {% for message in get_flashed_messages() %}
+                <div class="flash">{{ message }}</div>
+              {% endfor %}
+              {% block content %}{% endblock %}
+            </section>
+              <p> See you </p>
+              <p>''' + payload + '''</p>
+              </body>
+            </html>'''
+    return render_template_string(template)
 
 
