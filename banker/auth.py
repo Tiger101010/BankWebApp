@@ -142,15 +142,13 @@ def login():
 @bp.route("/logout")
 def logout():
     """Clear the current session, including the stored user id."""
-    payload = request.args.get('name',"GUEST")
+    if g.user:
+        usrname = g.user['username']
+    else:
+        usrname = "GUEST"
+    payload = request.args.get('name',usrname)
     session.clear()
     template = '''
-            <!DOCTYPE html>
-            <html>
-              <head>
-                <title>No Filter</title>
-              </head>
-              <body>
               <title>{% block title %}{% endblock %} - Banker</title>
             <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
             <nav>
