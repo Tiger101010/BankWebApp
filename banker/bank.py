@@ -1,16 +1,10 @@
-import functools
-import sqlite3
-
 from flask import Blueprint
 from flask import flash
 from flask import g
 from flask import redirect
 from flask import render_template
 from flask import request
-from flask import session
 from flask import url_for
-from werkzeug.security import check_password_hash
-from werkzeug.security import generate_password_hash
 
 from banker.auth import login_required
 from banker.db import get_db
@@ -86,11 +80,24 @@ def adjust_balance(usrname):
 
 
 def get_balance(usrname):
-    """get balance based on username
     """
-    print("get_balance")
+    get balance based on username
+    """
     db = get_db()
     balance = db.execute("Select balance FROM user WHERE username = ?", (usrname,)).fetchone()
     # print(balance)
     if balance:
         return str(balance[0])
+
+# Balance Query
+@bp.route("/<usrname>/balance/reset", methods=["GET", "POST"])
+@login_required
+def reset_balance(usrname):
+    """
+    Reset balance
+    """
+    db = get_db()
+    db.execute("Update user SET balance = 0 WHERE username = ?", (usrname,))
+    db.commit()
+    return get_balance(usrname)
+
