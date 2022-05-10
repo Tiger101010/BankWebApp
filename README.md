@@ -53,3 +53,13 @@ Or on Windows cmd::
     > flask run
 
 Open http://127.0.0.1:5000 in a browser.
+
+
+Cite Source:
+---
+We used the flaskr tutorial to help us with setting up a flask application as well as
+the login and registration
+
+[Tutorial Here](https://flask.palletsprojects.com/en/2.1.x/tutorial/)
+
+[Code Here](https://github.com/pallets/flask/tree/main/examples/tutorial/flaskr)
