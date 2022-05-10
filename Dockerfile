@@ -17,7 +17,6 @@ COPY . /app
 ENTRYPOINT [ "flask" ]
 
 ENV FLASK_APP=banker
-ENV FLASK_ENV=development
 
 CMD ["init-db"]
 CMD ["run", "--host=0.0.0.0"]
