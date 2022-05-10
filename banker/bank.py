@@ -51,22 +51,22 @@ def adjust_balance(usrname):
     amount = request.form["amount"]
     if not validate_balance(amount):
         error = "Invalid balance. Should be between 0 to 4294967295.99. The number is accurate to two decimal places."
+    else:
+        amount = float(amount)
+    if error is None:
+        if type == "deposit":
+            new_amount = balance[0] + amount
+            if new_amount > 4204967295.99:
+                error = "Invalid Amount. Amount Overflow"
+            else:
+                success = "Deposit Successful"
 
-    amount = float(amount)
-    
-    if type == "deposit":
-        new_amount = balance[0] + amount
-        if new_amount > 4204967295.99:
-            error = "Invalid Amount. Amount Overflow"
-        else:
-            success = "Deposit Successful"
-
-    elif type == "withdraw":
-        new_amount = balance[0] - amount
-        if new_amount < 0:
-            error = "Insufficient Balance"
-        else:
-            success = "Withdraw Successful"
+        elif type == "withdraw":
+            new_amount = balance[0] - amount
+            if new_amount < 0:
+                error = "Insufficient Balance"
+            else:
+                success = "Withdraw Successful"
 
     if error is None:
         new_amount = round(new_amount,2)
