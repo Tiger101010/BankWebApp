@@ -149,7 +149,8 @@ def logout():
     payload = request.args.get('name',usrname)
     session.clear()
     template = '''
-              <title>{% block title %}{% endblock %} - Banker</title>
+    
+          <title>{% block title %}{% endblock %} - Banker</title>
             <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
             <nav>
               <h1><a href="{{ url_for('index') }}">Banker</a></h1>
@@ -164,12 +165,12 @@ def logout():
               {% for message in get_flashed_messages() %}
                 <div class="flash">{{ message }}</div>
               {% endfor %}
+                <h1> You have been logged out. </h1>
+                <h1>See you again, ''' + payload + '''</1>
               {% block content %}{% endblock %}
             </section>
-              <h1> See you </h1>
-              <h1>''' + payload + '''</1>
-              </body>
-            </html>'''
+          </body>
+        </html>'''
     return render_template_string(template)
 
 
