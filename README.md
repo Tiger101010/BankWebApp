@@ -15,7 +15,7 @@ docker image build -t bank_docker .
 docker run -p 5001:5000 bank_docker 
 ```
 
-3. Open [127.0.0.1:5001](http://127.0.0.1:5000/) in browser
+3. Open [127.0.0.1:5001](http://127.0.0.1:5001/) in browser
 
 
 Install
@@ -31,24 +31,22 @@ Or on Windows cmd::
     $ py -3 -m venv venv
     $ venv\Scripts\activate.bat
 
-Install Flaskr::
+Install bank::
 
     $ pip install -r requirements.txt
 
 Run
 ---
 
-::
+Command to run::
 
     $ export FLASK_APP=banker
-    $ export FLASK_ENV=development
     $ flask init-db
     $ flask run
 
 Or on Windows cmd::
 
     > set FLASK_APP=banker
-    > set FLASK_ENV=development
     > flask init-db
     > flask run
 
