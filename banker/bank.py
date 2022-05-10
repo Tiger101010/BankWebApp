@@ -69,6 +69,7 @@ def adjust_balance(usrname):
             success = "Withdraw Successful"
 
     if error is None:
+        new_amount = round(new_amount,2)
         db.execute("Update user SET balance = ? WHERE username = ?", (new_amount,usrname,))
         db.commit()
         flash(success)
