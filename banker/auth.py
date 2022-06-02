@@ -14,6 +14,7 @@ from banker.helper import util
 from banker.db import get_db
 
 bp = Blueprint("auth", __name__, url_prefix="/auth")
+white_list = ["http://google.com"]
 
 def login_required(view):
     """View decorator that redirects anonymous users to the login page."""
@@ -125,7 +126,7 @@ def login():
         if user:
             session.clear()
             session["user_id"] = user["id"]
-            if target:
+            if target and target in white_list:
                 return redirect(target)
             else:
                 return redirect(url_for('bank.index'))
