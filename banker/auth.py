@@ -94,7 +94,7 @@ def register():
                 try:
                     db.execute(
                         "INSERT INTO user (username, password, firstname, lastname, balance) VALUES (?, ?, ?, ?, ?)",
-                        (username, password, firstname, lastname, float(balance_str)),
+                        (username, generate_password_hash(password), firstname, lastname, float(balance_str)),
                     )
                     db.commit()
                 except Exception as e:
@@ -121,8 +121,12 @@ def login():
         db = get_db()
         error = None
         user = db.execute(
-            f"SELECT * FROM user WHERE username = '{username}' AND password = '{password}'", 
+            "SELECT * FROM user WHERE username = ?", (username,), 
         ).fetchone()
+        if user is None:
+            error = "incorrect username."
+        elif not check_password_hash(user["password"], password):
+            error = "Incorrect password."
         if user:
             session.clear()
             session["user_id"] = user["id"]
@@ -130,8 +134,6 @@ def login():
                 return redirect(target)
             else:
                 return redirect(url_for('bank.index'))
-        if user is None:
-            error = "Incorrent credential"
         flash(error)
     else:
         if session.get("user_id"):
