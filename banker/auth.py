@@ -86,7 +86,8 @@ def register():
         ).fetchone()
         if user:
             print("a register id: ",user["id"])
-            session["user_id"] = user["id"]
+            # Fixed Trust Boundary Violation
+            # session["user_id"] = user["id"]
             error = f"User {username} is already registered."
             flash(error)
         else:
@@ -151,29 +152,7 @@ def logout():
         usrname = "GUEST"
     payload = request.args.get('name',usrname)
     session.clear()
-    template = '''
-    
-          <title>{% block title %}{% endblock %} - Banker</title>
-            <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-            <nav>
-              <h1><a href="{{ url_for('index') }}">Banker</a></h1>
-              <ul>
-                  <li><a href="{{ url_for('auth.login') }}">Log In</a>
-              </ul>
-            </nav>
-            <section class="content">
-              <header>
-                {% block header %}{% endblock %}
-              </header>
-              {% for message in get_flashed_messages() %}
-                <div class="flash">{{ message }}</div>
-              {% endfor %}
-                <h1> You have been logged out. </h1>
-                <h1>See you again, ''' + payload + '''</1>
-              {% block content %}{% endblock %}
-            </section>
-          </body>
-        </html>'''
-    return render_template_string(template)
+    # Fixed "Sever Side Template Injection"
+    return render_template('auth/logout.html', payload=payload)
 
 
