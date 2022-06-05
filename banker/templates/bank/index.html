@@ -18,7 +18,7 @@
 <section class="deposit_form">
 {% if g.user %}
 <p>
-  <form method="post" action="{{ g.user['username'] }}/balance">
+  <form method="post" action="/balance">
     <label for="amount">Dollar Amount</label>
     <input name="amount" id="amount" required>
 
