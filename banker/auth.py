@@ -150,9 +150,8 @@ def logout():
         usrname = g.user['username']
     else:
         usrname = "GUEST"
-    payload = request.args.get('name',usrname)
     session.clear()
     # Fixed "Sever Side Template Injection"
-    return render_template('auth/logout.html', payload=payload)
+    return render_template('auth/logout.html', payload=usrname)
 
 
